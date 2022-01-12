@@ -685,7 +685,8 @@ export default {
         "bend_min":-1.0,
         "bend_max":1.0,
         "output_dir":'',
-        "generate_json":true
+        "generate_json":true,
+        "append_timestamp":true
       }
     }
   },

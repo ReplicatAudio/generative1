@@ -26,10 +26,14 @@ module.exports = (c)=>{
   if(!fs.existsSync(c.output_dir)){
     fs.mkdirSync(c.output_dir,{ recursive: true });
   }
-  const timestamp = Date.now();
-  fs.writeFileSync(c.output_dir+'/'+c.name+timestamp+'.mid',write.buildFile());
+  let name = c.name;
+  if(c.append_timestamp){
+    const timestamp = Date.now();
+    name = c.name+timestamp
+  }
+  fs.writeFileSync(c.output_dir+'/'+name+'.mid',write.buildFile());
   if(c.generate_json){
-    fs.writeFileSync(c.output_dir+'/'+c.name+timestamp+'.config.json',JSON.stringify(c,null,2));
+    fs.writeFileSync(c.output_dir+'/'+name+'.config.json',JSON.stringify(c,null,2));
   }
   return 1;
 }
