@@ -2,6 +2,8 @@
 
 A tool for producing generative (procedurally generated) MIDI files. 
 
+## [Download Here](https://github.com/matdombrock/generative1/releases/latest)
+
 ## Generative music
 
 > Generative : having the power or function of generating, originating, producing, or reproducing
@@ -28,7 +30,7 @@ Note: According to the strictest interpretation of what "generative music" is, t
 
 ## Using the software
 
-Head over to the [releases](https://github.com/matdombrock/generative1/releases) section and grab the latest build. 
+Head over to the [releases](https://github.com/matdombrock/generative1/releases/latest) section and grab the latest build. 
 
 You will need to bypass the Windows security screen because this software is not signed. 
 
