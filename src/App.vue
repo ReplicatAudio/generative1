@@ -7,16 +7,18 @@
     
       <h1>///////generative1</h1>
 
-      <div class="btn" @click="saveConfig()">save</div>
-      <div class="btn" @click="importConfig()">import</div>
-      <div class="btn" @click="toggleSection('settings')">settings</div>
+      
 
       <div class="fixed-buttons">
-        <div class="btn btn-back" @click="sectionBack()" v-if="s.section!==''">back</div>
-        <div class="btn btn-help" @click="sectionHelp()" v-if="s.section!=='' && !s.show_help">help</div>
+        <div class="btn btn-back" @click="sectionBack()" v-if="s.section!=='' || s.show_help">back</div>
+        <div class="btn btn-help" @click="sectionHelp()" v-if="!s.show_help">help</div>
+        <div class="btn" @click="toggleSection('settings')">settings</div>
+        <div class="btn" @click="saveConfig()">save</div>
+        <div class="btn" @click="importConfig()">import</div>
+        <div class="btn" @click="submit()">generate</div>
       </div>
 
-      <div class="shade" @click="sectionBack()" v-if="s.section!==''"></div>
+      <div class="shade" @click="sectionBack()" v-if="s.section!=='' || s.show_help"></div>
 
       <div class="track-info">
         <div class="form-item">
@@ -80,6 +82,10 @@
         <div class="btn section-title" @click="toggleSection('sequence_probability')">
           probabilities
         </div>
+        
+        <div class="btn section-title" @click="toggleSection('sequence_harmony_probability')">
+          harmony probabilities
+        </div>
 
         <div class="btn section-title" @click="toggleSection('sequence_bend')">
           bends
@@ -91,10 +97,6 @@
 
         <div class="btn section-title" @click="toggleSection('sequence_duration')">
           durations
-        </div>
-
-        <div class="btn section-title" @click="toggleSection('sequence_harmony_probability')">
-          harmony probabilities
         </div>
 
         <div class="splitter-title">Misc</div>
@@ -256,9 +258,14 @@
           <div v-for="(value, index) of c.sequence_bend" :key="index">
             <div class="array-item">
               <div class="array-title">{{index+1}}</div>
-              <input type="range" min="-1.0" max="1.0" step="0.01" v-model="c.sequence_bend[index]" class="slider">
-              <input type="number" class="number-small" v-model="c.sequence_bend[index]">
-              <div class="btn btn-sm" @click="removeFromArray('sequence_bend',index)">⮾</div>
+              <span v-if="c.sequence_bend[index] !=='?'">
+                <input type="range" min="-1.0" max="1.0" step="0.01" v-model="c.sequence_bend[index]" class="slider">
+                <input type="number" class="number-small" v-model="c.sequence_bend[index]">
+              </span>
+              <span class="random-arr" v-if="c.sequence_bend[index] ==='?'">
+                random
+              </span>
+              <div class="btn btn-sm" @click="randomToArray('sequence_bend',index)">⚄</div><div class="btn btn-sm" @click="removeFromArray('sequence_velocity',index)">⮾</div>
             </div>
           </div>
           <div class="btn btn-sm btn-add" @click="addToArray('sequence_bend')">+ add element</div>
@@ -274,9 +281,14 @@
           <div v-for="(value, index) of c.sequence_velocity" :key="index">
             <div class="array-item">
               <div class="array-title">{{index+1}}</div>
-              <input type="range" min="0" max="100" v-model="c.sequence_velocity[index]" class="slider">
-              <input type="number" class="number-small" v-model="c.sequence_velocity[index]">
-              <div class="btn btn-sm" @click="removeFromArray('sequence_velocity',index)">⮾</div>
+              <span v-if="c.sequence_velocity[index] !=='?'">
+                <input type="range" min="0" max="100" v-model="c.sequence_velocity[index]" class="slider">
+                <input type="number" class="number-small" v-model="c.sequence_velocity[index]">
+              </span>
+              <span class="random-arr" v-if="c.sequence_velocity[index] ==='?'">
+                random <!--{{c.velocity_min}}->{{c.velocity_max}}-->
+              </span>
+              <div class="btn btn-sm" @click="randomToArray('sequence_velocity',index)">⚄</div><div class="btn btn-sm" @click="removeFromArray('sequence_velocity',index)">⮾</div>
             </div>
           </div>
           <div class="btn btn-sm btn-add" @click="addToArray('sequence_velocity')">+ add element</div>
@@ -387,6 +399,10 @@
       <div class="help-modal" v-if="s.show_help">
         <h1>help</h1>
 
+        <div v-if="s.section===''">
+          Welcome to generative1. Select a section and click `help` again to see specific help info.
+        </div>
+
         <div v-if="s.section==='interval_weights'">
           Most scales consist of 7 notes. Starting on the tonic (root note, unison) and ending on the 7th.
           <br><br>
@@ -440,32 +456,73 @@
           Tip: A good place to start is heavily weighting the 7th interval which is the perfect 5th.
         </div>
 
+        <div v-if="s.section==='harmony_amount_weights'">
+          Harmony is a word that describes playing 2 or more notes at the same time 
+          that have a pleasing acoustic relationship. You can play up to 7 notes of harmony at a time.
+          <br><br>
+          Use this screen to assign a weighted probability value to each harmony amount.
+          <br><br>
+          The more weight that is assigned to a given amount, the more likely that amount of harmony is to be selected.
+        </div>
+
         <div v-if="s.section==='duration_weights'">
-          Help Text
+          When your sequence has a random duration, it will be selected based off the weights of the values here.
+          <br><br>
+          The more weight that is assigned to a given duration, the more likely that duration is to be selected
+          as the random duration that will be assigned to the note in the sequence.
+          <br><br>
+          Tip: Using random sequence durations can lead to very strange output. 
+          <br><br>
+          Tip: Giving weight to only one vale here can make the output more stable. 
         </div>
 
         <div v-if="s.section==='sequence_probability'">
-          Help Text
+          Use this screen to assign a (non-weighted) probability value to each element of the sequence.
+          <br><br>
+          A value of 100 will lead to a 100% change that element is played and a value of 50 would be a 50% chance.
+          <br><br>
+          Tip: Setting a single element to 0 here can add a rhythmic element to the output. 
         </div>
 
         <div v-if="s.section==='sequence_velocity'">
-          Help Text
+          Velocity is a word used to describe how "hard" a note is played.  
+          <br><br>
+          Use this screen to assign a sequence of velocities.
+          <br><br>
+          Tip: Try setting increasing or decreasing the velocity over the course of the sequence
+          to give the output a pulsing feel.
+          <br><br>
+          Tip: Try setting a random velocity value with the die button.
         </div>
 
         <div v-if="s.section==='sequence_duration'">
-          Help Text
+          Duration determines how long the note or chord will be played.  
+          <br><br>
+          Use this screen to assign a sequence of durations.
+          <br><br>
+          Tip: Using random sequence durations can lead to very strange output. 
         </div>
 
         <div v-if="s.section==='sequence_harmony_probability'">
-          Help Text
+          Use this screen to assign a (non-weighted) probability value to each element of the sequence.
+          <br><br>
+          This value will determine the likelihood that a sequence element will contain a harmony.
+        </div>
+
+        <div v-if="s.section==='sequence_bend'">
+          Use this screen to sequence pitch bends.
+          <br><br>
+          Tip: Use the die to assign a random pitch bend value.
         </div>
 
         <div v-if="s.section==='misc_options'">
-          Help Text
+          This page contains various options that control the range out midi output.
+          <br><br>
+          These values only affect randomly generated elements and not elements that you set manually.
         </div>
 
         <div v-if="s.section==='settings'">
-          Help Text
+          This is the settings menu. These settings do not affect the contents of the midi output. 
         </div>
 
       </div>
@@ -473,7 +530,8 @@
       <hr>
 
       <div class="footer">
-        <div class="center"> Mathieu Dombrock 2022 | GPL </div>
+        <div class="center"> made with ♥</div>
+        <div class="center"> mathieu dombrock 2022 | GPL </div>
       </div>
     </div>
   </div>
@@ -501,7 +559,7 @@ export default {
         "harmony_amount_weights":[0,0,0,100,0,0,0,0],
         "sequence_probability":[100,100,100,50],
         "sequence_bend":[0],
-        "sequence_velocity":[50,75,65,100],
+        "sequence_velocity":[50,75,65,100,"?"],
         "sequence_duration":["1","2","?","?"],
         "sequence_harmony_probability":[0,0,0,0],
         "duration_weights":{
@@ -544,6 +602,15 @@ export default {
     removeFromArray(arr,index){
       this.c[arr].splice(index,1);
     },
+    randomToArray(arr, index, defVal=0){
+      if(this.c[arr][index] !== '?'){
+        this.$set(this.c[arr], index, '?');
+        //this.c[arr][index] = '?';
+      }else{
+        this.$set(this.c[arr], index, defVal);
+        //this.c[arr][index] = 0;
+      }
+    },
     submit(){
       //alert(JSON.stringify(this.c,null,2));
       if(this.c.output_dir==='' || this.c.output_dir === undefined){
@@ -552,8 +619,9 @@ export default {
         return;
       }
       const { ipcRenderer } = window.require('electron');
-      console.log(ipcRenderer.sendSync('generateMidi', this.c)) // prints "pong"
-      alert('DONE!');
+      const res = ipcRenderer.sendSync('generateMidi', this.c);
+      console.log(res); 
+      alert(res);
     },
     setDir(){
       const { ipcRenderer } = window.require('electron');
@@ -587,6 +655,7 @@ export default {
 <style>
 :root{
   --scrollbar-width:3px;
+  --shade:rgba(15, 15, 15,0.78);
   --bg:rgb(33,33,33);
   --bg-light:rgb(45,45,45);
   --high:rgb(100, 200, 170);
@@ -643,13 +712,14 @@ input {
   -ms-user-select: all;      /* IE 10+ */
   user-select: all;          /* Likely future */     
   width: 100%;
-  height: 25px;
+  height: 2rem;
   box-sizing: border-box;
   border: 1px solid var(--bg-light);
   border-radius: 4px;
   background-color: var(--bg-light);
   color:var(--text);
-  font-size: 16px;
+  font-size: 1.75rem;
+  padding:0.25rem;
   resize: none;
   vertical-align: text-bottom;
 }
@@ -666,6 +736,7 @@ select{
 }
 
 .top-image{
+  padding-top:2rem;
   text-align:center;
   background:var(--high-low);
 }
@@ -686,13 +757,25 @@ select{
   min-width:300px;
   max-width:300px;
 }
+.random-arr{
+  display:inline-block;
+  height:2rem;
+  font-size:2rem;
+  min-width:375px;
+  max-width:375px;
+  text-align:center;
+  background:var(--bg-light);
+  margin-left:3px;
+  margin-right:2px;
+}
 .number-small{
-  max-width:50px;
+  max-width:75px;
 }
 .array-title{
   display:inline-block;
   width:50px;
-  vertical-align: text-bottom;
+  line-height:1rem;
+  font-size:1.2rem;
   text-align:center;
   color:var(--high);
 }
@@ -718,8 +801,9 @@ select{
   top:0;
   width:100vw;
   height:100%;
-  background:rgba(15, 15, 15,0.78);
+  background:var(--shade);
   padding:1rem;
+  cursor:pointer;
 }
 .help-modal{
   z-index:1000;
@@ -769,18 +853,21 @@ select{
   margin-right:0.3rem;
 }
 .btn:hover{
-  background:var(--high-low);
+  background:var(--high-low2);
   #color: var(--text-dark);
   font-weight:bolder;
 }
 .btn:active{
-  background:var(--high-low2);
+  background:var(--high-low);
   color: var(--text);
   font-weight:bolder;
 }
 .btn-sm{
-  width:25px;
-  height:25px;
+  width:2rem;
+  height:2rem;
+  padding:0;
+  font-size:2rem;
+  line-height:2rem;
   vertical-align: text-bottom;
 }
 
@@ -790,6 +877,7 @@ select{
 }
 .btn-add{
   width:calc(100% - 2rem);
+  font-size:1.2rem;
 }
 
 .btn-generate{
@@ -805,10 +893,14 @@ select{
 }
 .fixed-buttons{
   position:fixed;
-  top:0.3rem;
-  left:0.3rem;
+  #top:0.3rem;
+  #left:0.3rem;
+  top:0;
+  left:0;
+  width:100vw;
   z-index:9999;
   padding:0.3rem;
+  background: var(--shade);
 }
 
 .help-text{

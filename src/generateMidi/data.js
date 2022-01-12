@@ -52,10 +52,12 @@ const durations = [
 ];
 
 const octaves = [0,1,2,3,4,5,6,7,8,9,10];
+const harmony_amounts = [0,1,2,3,4,5,6,7]; 
 
 module.exports = {
   notes,
   modes,
   octaves,
-  durations
+  durations,
+  harmony_amounts
 };

@@ -78,8 +78,12 @@ ipcMain.on('generateMidi', (event, arg) => {
   console.log(arg) // prints "ping"
   console.log('GENERATING MIDI');
   const generate = require('./generateMidi');
-  generate(arg);
-  event.returnValue = 'pong'
+  try{
+    generate(arg);
+  }catch(err){
+    event.returnValue = err;
+  }
+  event.returnValue = 'done'
 })
 
 ipcMain.on('dir-select', async (event, arg) => {

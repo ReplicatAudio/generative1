@@ -10,18 +10,11 @@ module.exports = (track, c)=>{
 
     // Generate note (tonic) and harmony
     let note = random.note({mode:c.mode,key:c.key, weights: c.interval_weights, ch_weights:c.ch_interval_weights});
-    let harmony = random.harmony({note:note,mode:c.mode,key:c.key, weights: c.harmonic_interval_weights, limit_to_scale:c.limit_harmony_to_scale});
-    let harmony2 = random.harmony({note:note,mode:c.mode,key:c.key, weights: c.harmonic_interval_weights, limit_to_scale:c.limit_harmony_to_scale});
-    while(harmony2 === harmony){
-      harmony2 = random.harmony({note:note,mode:c.mode,key:c.key, weights: c.harmonic_interval_weights, limit_to_scale:c.limit_harmony_to_scale});
-    }
     
     const dur = generateDuration(i,c);
 
     // Generate octaves
     const oct = random.octave(c.octave_weights);
-    const oct2 = random.octave(c.octave_weights);
-    const oct3 = random.octave(c.octave_weights);
     
     const velocity = generateVelocity(i,c);
     
@@ -29,9 +22,12 @@ module.exports = (track, c)=>{
     
     const harmonyProbCheck = checkHarmonyProbability(i,c);
 
+    
+
     let eventNotes = [];
     if(harmonyProbCheck){
-      eventNotes = [note+oct, harmony+oct2, harmony2+oct3];
+      const harmonies = generateHarmonies(note,c);
+      eventNotes = [note+oct, ...harmonies];
     }else{
       eventNotes = [note+oct]
     }
@@ -72,6 +68,20 @@ function generateDuration(i,c){
     dur = c.sequence_duration[normSeqDurIndex];
   }
   return dur;
+}
+
+function generateHarmonies(note, c){
+  const {harmony_amounts} = require('./data');
+  const {weightArr} = require('./util');
+
+  let harmonies = [];
+  const harmonyAmtWeighted = weightArr(harmony_amounts, c.harmony_amount_weights);
+  const amt = random.arrItem(harmonyAmtWeighted);
+  for(let i = 0; i<amt;i++){
+    const harmony = random.harmony({note:note,mode:c.mode,key:c.key, weights: c.harmonic_interval_weights, limit_to_scale:c.limit_harmony_to_scale});
+    const oct = random.octave(c.octave_weights);
+    harmonies.push(harmony+oct);
+  }
 }
 
 function generateVelocity(i,c){
