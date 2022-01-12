@@ -22,7 +22,7 @@ A tool for producing generative (procedurally generated) MIDI files.
 
 -------
 
-If you are familiar with the "random" world generation in games like Minecraft and many otherd, then you already understand the basic idea at play here. These games use a technique known as [procedural generation](https://en.wikipedia.org/wiki/Procedural_generation) to build their world based on pseudo-random inputs (usually some kind of [noise](https://en.wikipedia.org/wiki/Perlin_noise)) and a set of rules.
+If you are familiar with the "random" world generation in games like Minecraft and many others, then you already understand the basic idea at play here. These games use a technique known as [procedural generation](https://en.wikipedia.org/wiki/Procedural_generation) to build their world based on pseudo-random inputs (usually some kind of [noise](https://en.wikipedia.org/wiki/Perlin_noise)) and a set of rules.
 
 This differs from full randomness because of the rule set at play. By setting clever rules, the developers of these games can generate seemingly plausible landscapes from pure noise.  
 
