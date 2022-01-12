@@ -124,6 +124,12 @@
           </div>
           <br>
 
+          <div class="sub-title">Append timestamp to file name: </div> 
+          <div class="btn btn-small" @click="c.append_timestamp=!c.append_timestamp">
+            {{c.append_timestamp}}
+          </div>
+          <br>
+
         </div>
       </div>
 
@@ -709,7 +715,12 @@ export default {
       const { ipcRenderer } = window.require('electron');
       const res = ipcRenderer.sendSync('generateMidi', this.c);
       console.log(res); 
-      alert(res);
+      if(res === 'done'){
+        const conf = confirm('done. \r\n \r\nwould you like to open the output directory?');
+        if(conf){
+          ipcRenderer.sendSync('openOutput', this.c.output_dir);
+        }
+      }
     },
     setDir(){
       const { ipcRenderer } = window.require('electron');

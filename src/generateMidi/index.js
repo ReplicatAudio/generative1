@@ -31,5 +31,6 @@ module.exports = (c)=>{
   if(c.generate_json){
     fs.writeFileSync(c.output_dir+'/'+c.name+timestamp+'.config.json',JSON.stringify(c,null,2));
   }
+  return 1;
 }
 

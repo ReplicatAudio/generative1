@@ -1,6 +1,6 @@
 'use strict'
 
-import { app, protocol, BrowserWindow, ipcMain, dialog } from 'electron'
+import { app, protocol, BrowserWindow, ipcMain, dialog, shell} from 'electron'
 import { createProtocol } from 'vue-cli-plugin-electron-builder/lib'
 import installExtension, { VUEJS_DEVTOOLS } from 'electron-devtools-installer'
 const isDevelopment = process.env.NODE_ENV !== 'production'
@@ -78,12 +78,14 @@ ipcMain.on('generateMidi', (event, arg) => {
   console.log(arg) // prints "ping"
   console.log('GENERATING MIDI');
   const generate = require('./generateMidi');
+  let res;
   try{
-    generate(arg);
+    res = generate(arg);
   }catch(err){
     event.returnValue = err;
   }
-  event.returnValue = 'done'
+  console.log(res);
+  event.returnValue = 'done';
 })
 
 ipcMain.on('dir-select', async (event, arg) => {
@@ -91,6 +93,12 @@ ipcMain.on('dir-select', async (event, arg) => {
   const dir = await dialog.showOpenDialog({properties: ['openFile', 'openDirectory']});//, 'multiSelections'
   console.log(dir);
   event.returnValue = dir;
+})
+
+ipcMain.on('openOutput', async (event, arg) => {
+  console.log(event,arg);
+  shell.showItemInFolder(arg);
+  event.returnValue = 1;
 })
 
 
