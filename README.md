@@ -58,7 +58,7 @@ If you have experience with electronic music production you probably are already
 
 Essentially a sequence is a series of events (elements) that happen in chronological order. When the last event is completed the sequence will start again from the first event.
 
-The thing that sets the sequencing capabilities of this software apart from most other sequencers is that each parameter can have a unique sequence length. This allows for **fractional sequence relationships**.
+The thing that sets the sequencing capabilities of this software apart from most other sequencers is that each parameter can have a unique sequence length. This allows for **fractional sequence relationships**. For instance, if you set the velocity sequence length to 5 and the pitch bend sequence length of 3 (a ratio of 5/3), between them you would have a sequence that only repeats every 15 events. 
 
 ### Weights
 Weights define the probability of various aspects of the music by assigning a "weight" (as opposed to an N% chance). Generally speaking, the more weight assigned to a given value, the more likely that value is to be selected for any given element in the sequence. 
