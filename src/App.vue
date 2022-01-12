@@ -219,12 +219,100 @@
 
         <div class="form-item">
           <div class="form-item-title">Duration Weights</div>
-          <div v-for="(value, key) of c.duration_weights" :key="key">
-            <div class="array-item">
-              <div class="array-title">{{key}}</div>
-              <input type="range" min="0" max="256" v-model="c.duration_weights[key]" class="slider">
-              <input type="number" class="number-small" v-model="c.duration_weights[key]">
-            </div>
+          <div class="array-item">
+            <div class="array-title atl">8/1</div>
+            <input type="range" min="0" max="256" v-model="c.duration_weights['t1024']" class="slider">
+            <input type="number" class="number-small" v-model="c.duration_weights['t1024']">
+          </div>
+          <div class="array-item">
+            <div class="array-title atl">4/1</div>
+            <input type="range" min="0" max="256" v-model="c.duration_weights['t512']" class="slider">
+            <input type="number" class="number-small" v-model="c.duration_weights['t512']">
+          </div>
+          <div class="array-item">
+            <div class="array-title atl">2/1</div>
+            <input type="range" min="0" max="256" v-model="c.duration_weights['t256']" class="slider">
+            <input type="number" class="number-small" v-model="c.duration_weights['t256']">
+          </div>
+          <div class="array-item">
+            <div class="array-title atl">1/1</div>
+            <input type="range" min="0" max="256" v-model="c.duration_weights['1']" class="slider">
+            <input type="number" class="number-small" v-model="c.duration_weights['1']">
+          </div>
+          <div class="array-item">
+            <div class="array-title atl">1/2</div>
+            <input type="range" min="0" max="256" v-model="c.duration_weights['2']" class="slider">
+            <input type="number" class="number-small" v-model="c.duration_weights['2']">
+          </div>
+          <div class="array-item">
+            <div class="array-title atl">1/d2</div>
+            <input type="range" min="0" max="256" v-model="c.duration_weights['d2']" class="slider">
+            <input type="number" class="number-small" v-model="c.duration_weights['d2']">
+          </div>
+          <div class="array-item">
+            <div class="array-title atl">1/dd2</div>
+            <input type="range" min="0" max="256" v-model="c.duration_weights['dd2']" class="slider">
+            <input type="number" class="number-small" v-model="c.duration_weights['dd2']">
+          </div>
+          <div class="array-item">
+            <div class="array-title atl">1/4</div>
+            <input type="range" min="0" max="256" v-model="c.duration_weights['4']" class="slider">
+            <input type="number" class="number-small" v-model="c.duration_weights['4']">
+          </div>
+          <div class="array-item">
+            <div class="array-title atl">1/4t</div>
+            <input type="range" min="0" max="256" v-model="c.duration_weights['4t']" class="slider">
+            <input type="number" class="number-small" v-model="c.duration_weights['4t']">
+          </div>
+          <div class="array-item">
+            <div class="array-title atl">1/d4</div>
+            <input type="range" min="0" max="256" v-model="c.duration_weights['d4']" class="slider">
+            <input type="number" class="number-small" v-model="c.duration_weights['d4']">
+          </div>
+          <div class="array-item">
+            <div class="array-title atl">1/dd4</div>
+            <input type="range" min="0" max="256" v-model="c.duration_weights['dd4']" class="slider">
+            <input type="number" class="number-small" v-model="c.duration_weights['dd4']">
+          </div>
+          <div class="array-item">
+            <div class="array-title atl">1/8</div>
+            <input type="range" min="0" max="256" v-model="c.duration_weights['8']" class="slider">
+            <input type="number" class="number-small" v-model="c.duration_weights['8']">
+          </div>
+          <div class="array-item">
+            <div class="array-title atl">1/8t</div>
+            <input type="range" min="0" max="256" v-model="c.duration_weights['8t']" class="slider">
+            <input type="number" class="number-small" v-model="c.duration_weights['8t']">
+          </div>
+          <div class="array-item">
+            <div class="array-title atl">1/d8</div>
+            <input type="range" min="0" max="256" v-model="c.duration_weights['d8']" class="slider">
+            <input type="number" class="number-small" v-model="c.duration_weights['d8']">
+          </div>
+          <div class="array-item">
+            <div class="array-title atl">1/dd8</div>
+            <input type="range" min="0" max="256" v-model="c.duration_weights['dd8']" class="slider">
+            <input type="number" class="number-small" v-model="c.duration_weights['dd8']">
+          </div>
+          <div class="array-item">
+            <div class="array-title atl">1/16</div>
+            <input type="range" min="0" max="256" v-model="c.duration_weights['16']" class="slider">
+            <input type="number" class="number-small" v-model="c.duration_weights['16']">
+          </div>
+          <div class="array-item">
+            <div class="array-title atl">1/16t</div>
+            <input type="range" min="0" max="256" v-model="c.duration_weights['16t']" class="slider">
+            <input type="number" class="number-small" v-model="c.duration_weights['16t']">
+          </div>
+          <div class="array-item">
+            <div class="array-title atl">1/32</div>
+            <input type="range" min="0" max="256" v-model="c.duration_weights['32']" class="slider">
+            <input type="number" class="number-small" v-model="c.duration_weights['32']">
+          </div>
+          <div class="array-item">
+            <div class="array-title atl">1/64</div>
+            <input type="range" min="0" max="256" v-model="c.duration_weights['64']" class="slider">
+            <input type="number" class="number-small" v-model="c.duration_weights['64']">
           </div>
         </div>
       
@@ -778,6 +866,9 @@ select{
   font-size:1.2rem;
   text-align:center;
   color:var(--high);
+}
+.atl{
+  width:75px;
 }
 .sub-title{
   display:inline-block;
