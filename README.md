@@ -65,7 +65,7 @@ Weights define the probability of various aspects of the music by assigning a "w
 
 So, an element with a weight of 50 is more likely to get chosen than an element with a weight of 25 but it will only be chosen about 2x as often. 
 
-If we were drawing numbers from a hat, you could think of the weight as being the amount of paper slips with given value on them. So if "A" has a weight of 50 and "B" has a weight of 25, we can think of the hat as containing 50 slips that say "A" and 25 that say "B".
+If we were drawing numbers from a hat, you could think of the weight as being the amount of paper slips with a given value on them. So if "A" has a weight of 50 and "B" has a weight of 25, we can think of the hat as containing 50 slips that say "A" and 25 that say "B".
 
 
 ## Using the software
